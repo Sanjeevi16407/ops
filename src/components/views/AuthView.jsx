@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight } from 'lucide-react';
+import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight, Copy, Check } from 'lucide-react';
 import { useInvestigation } from '../../store/InvestigationContext';
 
 export default function AuthView() {
@@ -18,6 +18,7 @@ export default function AuthView() {
   const [activeBoxIndex, setActiveBoxIndex] = useState(0);
   const [animatingBox, setAnimatingBox] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [copiedOtp, setCopiedOtp] = useState(false);
 
   // Resend Countdown Timer & Counter
   const [resendTimer, setResendTimer] = useState(30);
@@ -29,13 +30,13 @@ export default function AuthView() {
     useRef(null), useRef(null), useRef(null)
   ];
 
-  // Auto-dismiss Toast Notification after 4 seconds
+  // Auto-dismiss Toast Notification after 5 seconds
   useEffect(() => {
     let timer = null;
     if (toast && toast.show) {
       timer = setTimeout(() => {
         setToast(prev => prev ? { ...prev, show: false } : null);
-      }, 4000);
+      }, 5000);
     }
     return () => clearTimeout(timer);
   }, [toast]);
@@ -60,7 +61,7 @@ export default function AuthView() {
         if (statusObj.status === 'ACTIVE') {
           setCurrentReq(prev => ({ ...prev, ...statusObj }));
           setAuthStep('otp_ready');
-          showOtpSentToast();
+          showOtpSentToast(statusObj.otp);
           clearInterval(interval);
           setTimeout(() => inputRefs[0].current?.focus(), 150);
         } else if (statusObj.status === 'DENIED') {
@@ -72,13 +73,13 @@ export default function AuthView() {
     return () => clearInterval(interval);
   }, [authStep, currentReq]);
 
-  // Helper to trigger the required in-page notification toast
-  const showOtpSentToast = () => {
+  // Helper to trigger the required in-page notification toast with visible OTP
+  const showOtpSentToast = (otpCode) => {
     setToast({
       show: true,
       title: '🔐 OTP Verification',
-      message: 'OTP has been sent successfully.',
-      detail: 'Please check your registered email/device.'
+      message: `OTP sent successfully. Code: ${otpCode || '••••••'}`,
+      detail: 'Please enter the code below to complete verification.'
     });
   };
 
@@ -97,7 +98,7 @@ export default function AuthView() {
         setAuthStep('otp_ready');
         setOtpDigits(['', '', '', '', '', '']);
         setResendTimer(30);
-        showOtpSentToast();
+        showOtpSentToast(req.otp);
         setTimeout(() => inputRefs[0].current?.focus(), 150);
       } else {
         setAuthStep('pending_auth');
@@ -106,6 +107,15 @@ export default function AuthView() {
       setAuthStep('failure');
       setErrorMessage('Authentication service temporarily unavailable.');
     }
+  };
+
+  // Auto-fill OTP on login page click
+  const handleAutoFillOtp = () => {
+    if (!currentReq?.otp) return;
+    const digits = currentReq.otp.split('');
+    setOtpDigits(digits);
+    setActiveBoxIndex(5);
+    handleVerifyOtp(currentReq.otp);
   };
 
   // Digit Input Handler with mechanical micro-animations
@@ -159,10 +169,11 @@ export default function AuthView() {
       setIsResending(false);
 
       if (result.success) {
+        setCurrentReq(prev => ({ ...prev, otp: result.otp }));
         setOtpDigits(['', '', '', '', '', '']);
         setResendCount(prev => prev + 1);
         setResendTimer(30);
-        showOtpSentToast();
+        showOtpSentToast(result.otp);
         setTimeout(() => inputRefs[0].current?.focus(), 150);
       } else {
         setErrorMessage(result.error || 'Failed to resend OTP.');
@@ -195,7 +206,7 @@ export default function AuthView() {
       {/* Scanline Overlay */}
       <div className="absolute inset-0 scanline-overlay pointer-events-none opacity-40" />
 
-      {/* TOP FLOATING TOAST NOTIFICATION */}
+      {/* TOP FLOATING TOAST NOTIFICATION WITH VISIBLE OTP */}
       {toast && toast.show && (
         <div className="fixed top-6 right-6 z-50 max-w-md w-full animate-slide-down">
           <div className="bg-[#04121d] border-l-4 border-[#00ff9d] border-t border-r border-b border-[#00ff9d]/40 rounded-r-lg p-4 shadow-[0_0_30px_rgba(0,255,157,0.25)] flex items-start gap-3 relative">
@@ -298,7 +309,7 @@ export default function AuthView() {
           </div>
         )}
 
-        {/* STATE 3: OTP READY / INPUT 6 DIGITS */}
+        {/* STATE 3: OTP READY / INPUT 6 DIGITS WITH DISPLAYED OTP CODE */}
         {(authStep === 'otp_ready' || authStep === 'verifying') && (
           <div className="space-y-5 animate-fade-in">
             <div className="space-y-1">
@@ -308,10 +319,28 @@ export default function AuthView() {
               <p className="text-[11px] text-[#94a3b8]">
                 Enter 6-digit verification code sent to <strong className="text-[#00e5ff]">{currentReq?.email}</strong>
               </p>
-              <div className="text-[10px] text-[#64748b]">
-                Request Ref: <span className="font-mono text-[#00ff9d]">{currentReq?.requestId}</span>
-              </div>
             </div>
+
+            {/* VISIBLE VERIFICATION OTP CODE BADGE ON LOGIN PAGE */}
+            {currentReq?.otp && (
+              <div className="bg-[#00ff9d]/10 border border-[#00ff9d]/50 rounded-lg p-3 flex items-center justify-between text-left shadow-[0_0_20px_rgba(0,255,157,0.15)]">
+                <div>
+                  <span className="text-[10px] text-[#00ff9d] font-bold tracking-wider uppercase block">
+                    🔐 VERIFICATION OTP CODE:
+                  </span>
+                  <span className="text-2xl font-bold font-mono tracking-widest text-[#00ff9d]">
+                    {currentReq.otp}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAutoFillOtp}
+                  className="bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold text-[10px] px-3.5 py-2 rounded transition cursor-pointer flex items-center gap-1 shadow-[0_0_10px_rgba(0,255,157,0.4)]"
+                >
+                  AUTO-FILL & VERIFY
+                </button>
+              </div>
+            )}
 
             {/* 6 Mechanical Digit Input Boxes */}
             <div className="flex justify-center items-center gap-2.5 my-4" onPaste={handlePaste}>

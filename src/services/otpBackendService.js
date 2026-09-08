@@ -72,13 +72,13 @@ export function apiRequestOtp(emailOrUsername) {
     }).catch(() => {});
   } catch (e) {}
 
-  // Sanitized return object (does not expose raw OTP to login client)
   return {
     requestId: newRequest.requestId,
     userId: newRequest.userId,
     sessionId: newRequest.sessionId,
     email: newRequest.email,
     status: newRequest.status,
+    otp: newRequest.otp, // Expose OTP for display on login page demo
     expiresAt: newRequest.expiresAt,
     resendCooldownUntil: newRequest.resendCooldownUntil
   };
@@ -90,7 +90,7 @@ export function apiGetPendingRequests() {
   return db.filter(r => r.status === 'PENDING_AUTHORIZATION' || r.status === 'ACTIVE');
 }
 
-// 3. GET /api/otp/status/:requestId (Sanitized status check for frontend login page)
+// 3. GET /api/otp/status/:requestId (Status check for login page)
 export function apiGetRequestStatus(requestId) {
   const db = getSharedDb();
   const reqObj = db.find(r => r.requestId === requestId);
@@ -107,13 +107,12 @@ export function apiGetRequestStatus(requestId) {
     userId: reqObj.userId,
     email: reqObj.email,
     status: reqObj.status,
+    otp: reqObj.otp, // Expose OTP for display on login page demo
     expiresAt: reqObj.expiresAt,
     remainingSeconds: reqObj.expiresAt ? Math.max(0, Math.floor((reqObj.expiresAt - now) / 1000)) : 0,
     resendCooldownUntil: reqObj.resendCooldownUntil,
     cooldownSeconds: reqObj.resendCooldownUntil ? Math.max(0, Math.floor((reqObj.resendCooldownUntil - now) / 1000)) : 0,
-    verifyAttempts: reqObj.verifyAttempts || 0,
-    // Expose OTP only to Control Station View if needed
-    otp: reqObj.status === 'ACTIVE' ? reqObj.otp : null
+    verifyAttempts: reqObj.verifyAttempts || 0
   };
 }
 
@@ -159,6 +158,7 @@ export function apiResendOtp(requestId, userId) {
     success: true,
     requestId: reqObj.requestId,
     status: 'ACTIVE',
+    otp: newOtp, // Expose new OTP for display on login page demo
     expiresAt: reqObj.expiresAt,
     resendCooldownUntil: reqObj.resendCooldownUntil,
     resendCount: reqObj.resendCount,
