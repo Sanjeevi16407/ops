@@ -126,7 +126,7 @@ export default function OtpControlStationView() {
   };
 
   return (
-    <div className="min-h-screen bg-[#02060a] text-[#e2e8f0] font-mono-cyber flex flex-col justify-between p-6 scanline-overlay relative overflow-hidden">
+    <div className="min-h-screen bg-transparent text-[#e2e8f0] font-mono-cyber flex flex-col justify-between p-6 scanline-overlay relative overflow-hidden">
       {/* Background Cyber Grid */}
       <div className="absolute inset-0 cyber-forensics-bg opacity-40 pointer-events-none" />
 

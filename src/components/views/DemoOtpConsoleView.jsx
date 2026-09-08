@@ -36,7 +36,7 @@ export default function DemoOtpConsoleView() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-61px)] flex items-center justify-center p-6 bg-[#02070b] cyber-forensics-bg font-mono-cyber relative overflow-hidden">
+    <div className="min-h-[calc(100vh-61px)] flex items-center justify-center p-6 bg-transparent cyber-forensics-bg font-mono-cyber relative overflow-hidden">
       {/* Main Console Box */}
       <div className="w-full max-w-lg cyber-panel p-8 space-y-6 border border-[#00e5ff]/40 shadow-[0_0_35px_rgba(0,229,255,0.15)] relative z-10 text-center">
         {/* Banner Notice: DEMO MODE ONLY */}

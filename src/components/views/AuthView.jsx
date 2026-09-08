@@ -227,7 +227,7 @@ export default function AuthView() {
   };
 
   return (
-    <div className="w-screen min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#02070b] cyber-forensics-bg font-mono-cyber relative overflow-hidden">
+    <div className="w-screen min-h-screen flex items-center justify-center p-4 sm:p-6 bg-transparent cyber-forensics-bg font-mono-cyber relative overflow-hidden">
       {/* Floating Fluid Liquid Ambient Light Orbs */}
       <div className="ambient-liquid-teal -top-24 -left-20" />
       <div className="ambient-liquid-cyan -bottom-28 -right-20" />
