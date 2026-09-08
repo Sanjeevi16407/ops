@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight, Radio, Sparkles, Terminal, Activity, Zap } from 'lucide-react';
+import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight, Radio, Sparkles, Terminal, Activity, Zap, Droplets } from 'lucide-react';
 import { useInvestigation } from '../../store/InvestigationContext';
 
 export default function AuthView() {
@@ -13,7 +13,7 @@ export default function AuthView() {
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [decryptedDigits, setDecryptedDigits] = useState(['*', '*', '*', '*', '*', '*']);
 
-  // Toast Notification State (Centered Top Floating Glass Toast)
+  // Toast Notification State (Centered Top Floating Liquid Glass Toast)
   const [toast, setToast] = useState(null);
 
   // 6 Digit OTP Input State
@@ -54,7 +54,7 @@ export default function AuthView() {
     return () => clearInterval(timer);
   }, [authStep, resendTimer]);
 
-  // Trigger Unique Cyber Decryption Sequence Animation when OTP arrives
+  // Trigger Unique Liquid Decryption Sequence Animation when OTP arrives
   const triggerDecryptionAnimation = (otpCode) => {
     if (!otpCode) return;
     setIsDecrypting(true);
@@ -98,13 +98,13 @@ export default function AuthView() {
     return () => clearInterval(interval);
   }, [authStep, currentReq]);
 
-  // Helper to trigger the top-centered notification toast
+  // Helper to trigger the top-centered liquid glass toast
   const showOtpSentToast = (otpCode) => {
     setToast({
       show: true,
       title: '🔐 2FA Dispatched Successfully',
       message: `Verification token generated. Code: ${otpCode || '••••••'}`,
-      detail: 'Registered device linked. Complete verification below.'
+      detail: 'Secure channel linked. Complete verification below.'
     });
   };
 
@@ -228,34 +228,34 @@ export default function AuthView() {
 
   return (
     <div className="w-screen min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#02070b] cyber-forensics-bg font-mono-cyber relative overflow-hidden">
-      {/* Floating Vibrant Ambient Light Orbs for Authentic Glassmorphism Refraction */}
-      <div className="ambient-orb-emerald -top-20 -left-20" />
-      <div className="ambient-orb-cyan -bottom-24 -right-20" />
-      <div className="ambient-orb-violet top-1/3 right-1/4 opacity-60" />
+      {/* Floating Fluid Liquid Ambient Light Orbs */}
+      <div className="ambient-liquid-teal -top-24 -left-20" />
+      <div className="ambient-liquid-cyan -bottom-28 -right-20" />
+      <div className="ambient-liquid-indigo top-1/3 right-1/4 opacity-60" />
 
       {/* Dynamic Scanline Light Beam */}
       <div className="scanline-beam" />
 
-      {/* TOP CENTER FLOATING FROSTED GLASS TOAST */}
+      {/* TOP CENTER FLOATING LIQUID GLASS TOAST */}
       {toast && toast.show && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-lg w-full px-4 animate-slide-down">
-          <div className="glass-toast rounded-2xl p-4 flex items-start gap-3.5 relative">
-            <div className="p-2.5 rounded-xl bg-[#00ff9d]/20 text-[#00ff9d] shrink-0 border border-[#00ff9d]/50 shadow-[0_0_20px_rgba(0,255,157,0.5)]">
+          <div className="liquid-glass-toast rounded-2xl p-4 flex items-start gap-3.5 relative">
+            <div className="p-2.5 rounded-xl bg-[#00f5d4]/20 text-[#00f5d4] shrink-0 border border-[#00f5d4]/50 shadow-[0_0_20px_rgba(0,245,212,0.45)]">
               <Lock className="w-5 h-5 animate-pulse" />
             </div>
             <div className="space-y-0.5 text-left flex-1 pr-3">
-              <div className="text-xs font-bold text-[#00ff9d] tracking-wider uppercase flex items-center justify-between">
+              <div className="text-xs font-bold text-[#00f5d4] tracking-wider uppercase flex items-center justify-between">
                 <span>{toast.title}</span>
-                <span className="text-[9px] bg-[#00ff9d]/20 text-[#00ff9d] border border-[#00ff9d]/40 px-2 py-0.5 rounded-full font-mono">
-                  LIVE 2FA
+                <span className="text-[9px] bg-[#00f5d4]/20 text-[#00f5d4] border border-[#00f5d4]/40 px-2 py-0.5 rounded-full font-mono">
+                  LIQUID 2FA
                 </span>
               </div>
-              <p className="text-xs font-semibold text-[#f1f5f9]">{toast.message}</p>
+              <p className="text-xs font-semibold text-[#f8fafc]">{toast.message}</p>
               <p className="text-[11px] text-[#94a3b8]">{toast.detail}</p>
             </div>
             <button
               onClick={() => setToast(null)}
-              className="text-[#94a3b8] hover:text-[#f1f5f9] transition p-1 cursor-pointer"
+              className="text-[#94a3b8] hover:text-[#f8fafc] transition p-1 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -263,30 +263,33 @@ export default function AuthView() {
         </div>
       )}
 
-      {/* MAIN AUTHENTIC FROSTED GLASSMORPHISM TERMINAL CARD */}
-      <div className="w-full max-w-md mx-auto relative z-10 glass-card p-8 sm:p-9 text-center">
-        {/* HUD Corner Bracket Accents */}
+      {/* MAIN LIQUID GLASS TERMINAL CARD CONTAINER */}
+      <div className="w-full max-w-md mx-auto relative z-10 liquid-glass-card p-8 sm:p-9 text-center">
+        {/* HUD Corner Bracket Accents in Fluorescent Mint */}
         <div className="hud-corner-tl" />
         <div className="hud-corner-tr" />
         <div className="hud-corner-bl" />
         <div className="hud-corner-br" />
 
-        {/* Live Clearance Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-[10px] font-bold text-[#00ff9d] uppercase tracking-widest mb-4">
-          <span className="w-2 h-2 rounded-full bg-[#00ff9d] animate-ping" />
-          <span>SECURITY ACCESS GATEWAY // LEVEL 4</span>
+        {/* Live Clearance Liquid Status Pill */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill text-[10px] font-bold text-[#00f5d4] uppercase tracking-widest mb-4">
+          <span className="w-2 h-2 rounded-full bg-[#00f5d4] animate-ping" />
+          <span className="flex items-center gap-1.5">
+            <Droplets className="w-3 h-3 text-[#00f5d4]" />
+            LIQUID SECURITY ACCESS // LEVEL 4
+          </span>
         </div>
 
         {/* ARVIX Holographic Brand Icon & Header */}
         <div className="flex flex-col items-center space-y-2 mb-6">
           <div className="relative">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00ff9d]/30 via-[rgba(6,24,38,0.6)] to-[#00e5ff]/30 border border-[#00ff9d]/60 flex items-center justify-center text-[#00ff9d] shadow-[0_0_35px_rgba(0,255,157,0.45)] backdrop-blur-md">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00f5d4]/30 via-[rgba(15,62,77,0.7)] to-[#00b4d8]/30 border border-[#00f5d4]/70 flex items-center justify-center text-[#00f5d4] shadow-[0_0_35px_rgba(0,245,212,0.45)] backdrop-blur-md">
               <Shield className="w-9 h-9" />
             </div>
-            <div className="absolute -inset-1 rounded-2xl bg-[#00ff9d]/25 blur-lg pointer-events-none -z-10" />
+            <div className="absolute -inset-1.5 rounded-2xl bg-[#00f5d4]/20 blur-lg pointer-events-none -z-10" />
           </div>
 
-          <h1 className="text-3xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00ff9d] to-[#00e5ff] pt-1">
+          <h1 className="text-3xl font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00f5d4] to-[#00b4d8] pt-1">
             ARVIX
           </h1>
           <p className="text-[10px] text-[#94a3b8] tracking-widest uppercase font-semibold">
@@ -300,7 +303,7 @@ export default function AuthView() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-[10px] font-bold text-[#cbd5e1] tracking-widest uppercase flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-[#00ff9d]" /> INVESTIGATOR IDENTITY / EMAIL *
+                  <Mail className="w-3.5 h-3.5 text-[#00f5d4]" /> INVESTIGATOR IDENTITY / EMAIL *
                 </label>
                 <span className="text-[9px] text-[#64748b]">REQUIRED</span>
               </div>
@@ -312,9 +315,9 @@ export default function AuthView() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="investigator@arvix.sec"
-                  className="w-full glass-input text-[#f8fafc] pl-10 pr-4 py-3.5 text-xs focus:outline-none placeholder-[#475569]"
+                  className="w-full liquid-glass-input text-[#f8fafc] pl-10 pr-4 py-3.5 text-xs focus:outline-none placeholder-[#475569]"
                 />
-                <Activity className="w-4 h-4 text-[#00ff9d]/80 absolute left-3.5 top-4" />
+                <Activity className="w-4 h-4 text-[#00f5d4]/80 absolute left-3.5 top-4" />
               </div>
 
               {/* Quick Preset Investigator Badges */}
@@ -330,7 +333,7 @@ export default function AuthView() {
                       key={preset.val}
                       type="button"
                       onClick={() => setEmail(preset.val)}
-                      className="px-3 py-1 rounded-lg glass-chip text-[#cbd5e1] hover:text-[#00ff9d] text-[10px] cursor-pointer"
+                      className="px-3 py-1 rounded-lg liquid-glass-chip text-[#cbd5e1] hover:text-[#00f5d4] text-[10px] cursor-pointer"
                     >
                       {preset.label}
                     </button>
@@ -339,28 +342,28 @@ export default function AuthView() {
               </div>
             </div>
 
-            {/* Glass Submit Button */}
+            {/* Liquid Glass Action Button */}
             <button
               type="submit"
-              className="w-full glass-btn-primary text-[#02070b] font-extrabold py-3.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer mt-3"
+              className="w-full liquid-glass-btn text-[#03121c] font-extrabold py-3.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer mt-3"
             >
-              <Cpu className="w-4 h-4 text-[#02070b]" />
+              <Cpu className="w-4 h-4 text-[#03121c]" />
               <span>AUTHENTICATE & SEND OTP</span>
-              <ArrowRight className="w-4 h-4 text-[#02070b]" />
+              <ArrowRight className="w-4 h-4 text-[#03121c]" />
             </button>
           </form>
         )}
 
         {/* STATE 2: PENDING AUTHORIZATION */}
         {authStep === 'pending_auth' && (
-          <div className="py-8 space-y-4 glass-subpanel p-6 text-center">
-            <Cpu className="w-12 h-12 text-[#00e5ff] animate-spin mx-auto" />
+          <div className="py-8 space-y-4 liquid-glass-subpanel p-6 text-center">
+            <Cpu className="w-12 h-12 text-[#00b4d8] animate-spin mx-auto" />
             <div className="space-y-1">
-              <div className="text-xs font-bold text-[#00e5ff] tracking-widest uppercase">
-                ESTABLISHING QUANTUM 2FA LINK...
+              <div className="text-xs font-bold text-[#00f5d4] tracking-widest uppercase">
+                ESTABLISHING LIQUID 2FA LINK...
               </div>
               <div className="text-[11px] text-[#cbd5e1]">
-                Request ID: <strong className="text-[#00ff9d]">{currentReq?.requestId}</strong>
+                Request ID: <strong className="text-[#00f5d4]">{currentReq?.requestId}</strong>
               </div>
             </div>
             <p className="text-[10px] text-[#64748b]">
@@ -369,40 +372,40 @@ export default function AuthView() {
           </div>
         )}
 
-        {/* STATE 3: OTP READY WITH GLASS QUANTUM DECRYPTION HUD */}
+        {/* STATE 3: OTP READY WITH LIQUID GLASS DECRYPTION HUD */}
         {(authStep === 'otp_ready' || authStep === 'verifying') && (
           <div className="space-y-5 animate-fade-in text-left">
             <div className="space-y-1 text-center">
-              <h2 className="text-xs font-bold text-[#00ff9d] uppercase tracking-wider flex items-center justify-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#00ff9d]" /> TWO-FACTOR OTP VERIFICATION
+              <h2 className="text-xs font-bold text-[#00f5d4] uppercase tracking-wider flex items-center justify-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#00f5d4]" /> TWO-FACTOR OTP VERIFICATION
               </h2>
               <p className="text-[11px] text-[#cbd5e1]">
-                Token sent to <strong className="text-[#00e5ff]">{currentReq?.email}</strong>
+                Token sent to <strong className="text-[#00b4d8]">{currentReq?.email}</strong>
               </p>
             </div>
 
-            {/* FROSTED GLASS DECRYPTION HUD */}
+            {/* LIQUID GLASS DECRYPTION HUD */}
             {currentReq?.otp && (
-              <div className="glass-subpanel p-4 space-y-3 relative overflow-hidden">
+              <div className="liquid-glass-subpanel p-4 space-y-3 relative overflow-hidden">
                 <div className="flex justify-between items-center text-[10px]">
-                  <span className="text-[#00ff9d] font-bold tracking-widest uppercase flex items-center gap-1.5">
-                    <Radio className="w-3.5 h-3.5 text-[#00ff9d] animate-ping" />
+                  <span className="text-[#00f5d4] font-bold tracking-widest uppercase flex items-center gap-1.5">
+                    <Radio className="w-3.5 h-3.5 text-[#00f5d4] animate-ping" />
                     {isDecrypting ? 'DECRYPTING QUANTUM STREAM...' : 'SIGNAL LOCKED // OTP DECRYPTED'}
                   </span>
-                  <span className="text-[#00e5ff] font-mono text-[9px] bg-[#00e5ff]/15 border border-[#00e5ff]/40 px-2 py-0.5 rounded-md">
+                  <span className="text-[#00b4d8] font-mono text-[9px] bg-[#00b4d8]/15 border border-[#00b4d8]/40 px-2 py-0.5 rounded-md">
                     {currentReq.requestId}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between bg-[rgba(2,10,18,0.6)] p-3 rounded-xl border border-[rgba(255,255,255,0.08)]">
-                  <div className="flex gap-2 font-mono font-bold text-xl text-[#00ff9d]">
+                <div className="flex items-center justify-between bg-[rgba(3,18,28,0.65)] p-3 rounded-xl border border-[rgba(255,255,255,0.08)]">
+                  <div className="flex gap-2 font-mono font-bold text-xl text-[#00f5d4]">
                     {decryptedDigits.map((digit, i) => (
                       <span
                         key={i}
                         className={`w-7 h-10 flex items-center justify-center rounded-lg border ${
                           isDecrypting
-                            ? 'bg-[rgba(0,229,255,0.15)] border-[#00e5ff] text-[#00e5ff] animate-pulse'
-                            : 'bg-[rgba(0,255,157,0.1)] border-[#00ff9d]/70 text-[#00ff9d] shadow-[0_0_12px_rgba(0,255,157,0.4)]'
+                            ? 'bg-[rgba(0,180,216,0.2)] border-[#00b4d8] text-[#00b4d8] animate-pulse'
+                            : 'bg-[rgba(0,245,212,0.12)] border-[#00f5d4]/70 text-[#00f5d4] shadow-[0_0_12px_rgba(0,245,212,0.4)]'
                         }`}
                       >
                         {digit}
@@ -414,7 +417,7 @@ export default function AuthView() {
                     type="button"
                     onClick={handleAutoFillOtp}
                     disabled={isDecrypting}
-                    className="glass-btn-primary text-[#02070b] font-extrabold text-[10px] px-3.5 py-2.5 rounded-lg cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+                    className="liquid-glass-btn text-[#03121c] font-extrabold text-[10px] px-3.5 py-2.5 rounded-lg cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     AUTO-FILL
@@ -437,16 +440,16 @@ export default function AuthView() {
                       onChange={(e) => handleDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(idx, e)}
                       onFocus={() => setActiveBoxIndex(idx)}
-                      className={`w-11 h-14 text-center text-xl font-bold rounded-xl text-[#00ff9d] focus:outline-none transition-all duration-200 glass-input ${
+                      className={`w-11 h-14 text-center text-xl font-bold rounded-xl text-[#00f5d4] focus:outline-none transition-all duration-200 liquid-glass-input ${
                         isAnimating
-                          ? 'border-[#00ff9d] bg-[#00ff9d]/25 shadow-[0_0_20px_rgba(0,255,157,0.9)] scale-105'
+                          ? 'border-[#00f5d4] bg-[#00f5d4]/25 shadow-[0_0_20px_rgba(0,245,212,0.9)] scale-105'
                           : activeBoxIndex === idx
-                          ? 'border-[#00ff9d] shadow-[0_0_14px_rgba(0,255,157,0.45)]'
+                          ? 'border-[#00f5d4] shadow-[0_0_14px_rgba(0,245,212,0.45)]'
                           : ''
                       }`}
                     />
                     {isAnimating && (
-                      <div className="absolute inset-x-0 h-0.5 bg-[#00ff9d] top-1/2 -translate-y-1/2 shadow-[0_0_12px_#00ff9d] animate-pulse" />
+                      <div className="absolute inset-x-0 h-0.5 bg-[#00f5d4] top-1/2 -translate-y-1/2 shadow-[0_0_12px_#00f5d4] animate-pulse" />
                     )}
                   </div>
                 );
@@ -454,7 +457,7 @@ export default function AuthView() {
             </div>
 
             {authStep === 'verifying' ? (
-              <div className="text-xs text-[#00e5ff] font-bold animate-pulse flex items-center justify-center gap-2 py-3">
+              <div className="text-xs text-[#00b4d8] font-bold animate-pulse flex items-center justify-center gap-2 py-3">
                 <Cpu className="w-4 h-4 animate-spin" /> VERIFYING CRYPTOGRAPHIC TOKEN...
               </div>
             ) : (
@@ -462,7 +465,7 @@ export default function AuthView() {
                 <button
                   onClick={() => handleVerifyOtp(otpDigits.join(''))}
                   disabled={otpDigits.join('').length < 6}
-                  className="w-full glass-btn-primary text-[#02070b] font-extrabold py-3.5 rounded-xl text-xs cursor-pointer disabled:opacity-40"
+                  className="w-full liquid-glass-btn text-[#03121c] font-extrabold py-3.5 rounded-xl text-xs cursor-pointer disabled:opacity-40"
                 >
                   VERIFY & ACCESS DASHBOARD
                 </button>
@@ -474,7 +477,7 @@ export default function AuthView() {
                     type="button"
                     onClick={handleResendOtp}
                     disabled={resendTimer > 0 || isResending}
-                    className="text-[#00e5ff] hover:text-[#00ff9d] font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="text-[#00b4d8] hover:text-[#00f5d4] font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                     {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend OTP'}
@@ -488,15 +491,15 @@ export default function AuthView() {
         {/* STATE 4: SUCCESS TRANSITION */}
         {authStep === 'success' && (
           <div className="py-8 space-y-4 animate-fade-in text-center">
-            <div className="w-20 h-20 rounded-full bg-[#00ff9d]/25 border-2 border-[#00ff9d] text-[#00ff9d] flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(0,255,157,0.75)] animate-bounce backdrop-blur-md">
+            <div className="w-20 h-20 rounded-full bg-[#00f5d4]/25 border-2 border-[#00f5d4] text-[#00f5d4] flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(0,245,212,0.75)] animate-bounce backdrop-blur-md">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-sm font-bold text-[#00ff9d] tracking-widest uppercase">
+              <h2 className="text-sm font-bold text-[#00f5d4] tracking-widest uppercase">
                 ✓ IDENTITY VERIFIED
               </h2>
-              <p className="text-xs text-[#00e5ff]">AUTHENTICATION SUCCESSFUL • INITIALIZING DASHBOARD</p>
+              <p className="text-xs text-[#00b4d8]">AUTHENTICATION SUCCESSFUL • INITIALIZING DASHBOARD</p>
             </div>
           </div>
         )}
@@ -524,7 +527,7 @@ export default function AuthView() {
               </button>
               <button
                 onClick={() => setAuthStep('idle')}
-                className="flex-1 glass-subpanel text-[#00e5ff] py-2.5 rounded-xl text-xs transition cursor-pointer"
+                className="flex-1 liquid-glass-subpanel text-[#00b4d8] py-2.5 rounded-xl text-xs transition cursor-pointer"
               >
                 BACK TO LOGIN
               </button>
@@ -550,7 +553,7 @@ export default function AuthView() {
 
             <button
               onClick={() => setAuthStep('idle')}
-              className="w-full glass-subpanel text-[#00e5ff] py-3 rounded-xl text-xs font-bold transition cursor-pointer"
+              className="w-full liquid-glass-subpanel text-[#00b4d8] py-3 rounded-xl text-xs font-bold transition cursor-pointer"
             >
               REQUEST AGAIN
             </button>
@@ -559,8 +562,8 @@ export default function AuthView() {
 
         {/* Telemetry Footer Bar */}
         <div className="border-t border-[rgba(255,255,255,0.08)] pt-4 mt-6 text-[10px] text-[#94a3b8] flex justify-between items-center">
-          <span className="flex items-center gap-1.5"><Lock className="w-3 h-3 text-[#00ff9d]" /> AES-256 ENCRYPTED</span>
-          <span className="text-[#00e5ff] flex items-center gap-1"><Zap className="w-3 h-3 text-[#00e5ff]" /> ARVIX v2.4 CORE</span>
+          <span className="flex items-center gap-1.5"><Lock className="w-3 h-3 text-[#00f5d4]" /> AES-256 ENCRYPTED</span>
+          <span className="text-[#00b4d8] flex items-center gap-1"><Zap className="w-3 h-3 text-[#00b4d8]" /> ARVIX LIQUID v2.4</span>
         </div>
       </div>
     </div>
