@@ -2,6 +2,8 @@ import React from 'react';
 import Header from './components/layout/Header';
 import Sidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
+import MobileDrawer from './components/layout/MobileDrawer';
+import MobileBottomNav from './components/layout/MobileBottomNav';
 import AuthView from './components/views/AuthView';
 import DemoOtpConsoleView from './components/views/DemoOtpConsoleView';
 import OtpControlStationView from './components/views/OtpControlStationView';
@@ -24,7 +26,7 @@ function MainContent() {
   if (activeTab === 'otp_control') return <OtpControlStationView />;
 
   return (
-    <main className="flex-1 p-6 overflow-y-auto min-h-[calc(100vh-61px-37px)] cyber-forensics-bg relative z-10">
+    <main className="flex-1 p-3 sm:p-5 md:p-6 pb-24 md:pb-6 overflow-y-auto min-h-[calc(100vh-61px-37px)] cyber-forensics-bg relative z-10 w-full max-w-full">
       {activeTab === 'dashboard' && <DashboardView />}
       {activeTab === 'cases' && <CaseManagerView />}
       {activeTab === 'evidence' && <EvidenceVaultView />}
@@ -66,6 +68,14 @@ function AppLayout() {
         <MainContent />
       </div>
       {!isAuthOrStandalone && <Footer />}
+
+      {/* Mobile-Exclusive Navigation Drawer & Floating Bottom Tab Bar */}
+      {!isAuthOrStandalone && (
+        <>
+          <MobileDrawer />
+          <MobileBottomNav />
+        </>
+      )}
     </div>
   );
 }

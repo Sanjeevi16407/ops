@@ -3,7 +3,7 @@ import { Lock, Activity, Droplets } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="liquid-glass-footer px-6 py-2 flex flex-wrap items-center justify-between text-[11px] font-mono-cyber text-[#94a3b8] sticky bottom-0 z-40">
+    <footer className="hidden md:flex liquid-glass-footer px-6 py-2 items-center justify-between text-[11px] font-mono-cyber text-[#94a3b8] sticky bottom-0 z-40">
       {/* Binary Stream Telemetry */}
       <div className="flex items-center gap-3 overflow-hidden max-w-md">
         <Droplets className="w-3.5 h-3.5 text-[#00f5d4] shrink-0" />

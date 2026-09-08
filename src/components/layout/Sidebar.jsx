@@ -21,7 +21,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 liquid-glass-sidebar p-4 flex flex-col justify-between h-[calc(100vh-61px)] sticky top-[61px] overflow-y-auto">
+    <aside className="hidden md:flex w-64 liquid-glass-sidebar p-4 flex-col justify-between h-[calc(100vh-61px)] sticky top-[61px] overflow-y-auto shrink-0">
       {/* Navigation Items */}
       <div className="space-y-1.5">
         {navItems.map((item) => {

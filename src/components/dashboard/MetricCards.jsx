@@ -68,28 +68,30 @@ export default function MetricCards() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-5">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3.5 mb-4 sm:mb-5">
       {cards.map((c) => {
         const Icon = c.icon;
         return (
           <div
             key={c.id}
-            className="cyber-panel p-4 flex items-center justify-between hover:border-[#00f5d4]/70 transition-all duration-300 group"
+            className={`cyber-panel p-3 sm:p-4 flex items-center justify-between hover:border-[#00f5d4]/70 transition-all duration-300 group ${
+              c.isStatusCard ? 'col-span-2 lg:col-span-1' : 'col-span-1'
+            }`}
           >
-            <div className="space-y-1">
-              <div className="text-[10px] text-[#94a3b8] tracking-wider uppercase font-mono-cyber font-bold">
+            <div className="space-y-0.5 sm:space-y-1 min-w-0 pr-1.5">
+              <div className="text-[9px] sm:text-[10px] text-[#94a3b8] tracking-wider uppercase font-mono-cyber font-bold truncate">
                 {c.label}
               </div>
-              <div className={`font-extrabold font-mono-cyber ${c.isStatusCard ? 'text-xs text-[#00f5d4] tracking-wider uppercase' : 'text-2xl text-[#f8fafc] group-hover:text-[#00f5d4] transition'}`}>
+              <div className={`font-extrabold font-mono-cyber truncate ${c.isStatusCard ? 'text-xs text-[#00f5d4] tracking-wider uppercase' : 'text-xl sm:text-2xl text-[#f8fafc] group-hover:text-[#00f5d4] transition'}`}>
                 {c.count}
               </div>
-              <div className="text-[9px] text-[#64748b] tracking-widest uppercase font-mono-cyber">
+              <div className="text-[8px] sm:text-[9px] text-[#64748b] tracking-widest uppercase font-mono-cyber truncate">
                 {c.subtitle}
               </div>
             </div>
 
-            <div className={`w-11 h-11 rounded-xl ${c.bgColor} border ${c.borderColor} flex items-center justify-center ${c.iconColor} shrink-0 shadow-[0_0_15px_rgba(0,245,212,0.15)] group-hover:scale-110 transition duration-300`}>
-              <Icon className="w-5 h-5" />
+            <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl ${c.bgColor} border ${c.borderColor} flex items-center justify-center ${c.iconColor} shrink-0 shadow-[0_0_15px_rgba(0,245,212,0.15)] group-hover:scale-110 transition duration-300`}>
+              <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
         );

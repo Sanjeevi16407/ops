@@ -25,6 +25,7 @@ export function InvestigationProvider({ children }) {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [activeAuthRequest, setActiveAuthRequest] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Active Case Data
   const [currentCase, setCurrentCase] = useState(null);
@@ -246,7 +247,12 @@ export function InvestigationProvider({ children }) {
   return (
     <InvestigationContext.Provider value={{
       activeTab,
-      setActiveTab,
+      setActiveTab: (tab) => {
+        setActiveTab(tab);
+        setMobileMenuOpen(false);
+      },
+      mobileMenuOpen,
+      setMobileMenuOpen,
       currentUser,
       activeAuthRequest,
       setActiveAuthRequest,

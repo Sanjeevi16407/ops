@@ -39,7 +39,7 @@ export default function EvidenceVaultView() {
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className="cyber-panel p-8 text-center border-2 border-dashed border-[#00ff9d]/40 hover:border-[#00ff9d] bg-[#00ff9d]/5 hover:bg-[#00ff9d]/10 transition rounded-lg cursor-pointer flex flex-col items-center justify-center space-y-3"
+        className="cyber-panel p-4 sm:p-8 text-center border-2 border-dashed border-[#00ff9d]/40 hover:border-[#00ff9d] bg-[#00ff9d]/5 hover:bg-[#00ff9d]/10 transition rounded-lg cursor-pointer flex flex-col items-center justify-center space-y-3"
       >
         <input
           type="file"

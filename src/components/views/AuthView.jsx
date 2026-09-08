@@ -268,7 +268,7 @@ export default function AuthView() {
       )}
 
       {/* MAIN LIQUID GLASS TERMINAL CARD CONTAINER */}
-      <div className="w-full max-w-md mx-auto relative z-10 liquid-glass-card p-8 sm:p-9 text-center">
+      <div className="w-full max-w-md mx-auto relative z-10 liquid-glass-card p-5 sm:p-8 sm:p-9 text-center">
         {/* HUD Corner Bracket Accents in Fluorescent Mint */}
         <div className="hud-corner-tl" />
         <div className="hud-corner-tr" />
@@ -401,12 +401,12 @@ export default function AuthView() {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between bg-[rgba(3,18,28,0.65)] p-3 rounded-xl border border-[rgba(255,255,255,0.08)]">
-                  <div className="flex gap-2 font-mono font-bold text-xl text-[#00f5d4]">
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 bg-[rgba(3,18,28,0.65)] p-2.5 sm:p-3 rounded-xl border border-[rgba(255,255,255,0.08)]">
+                  <div className="flex gap-1.5 sm:gap-2 font-mono font-bold text-lg sm:text-xl text-[#00f5d4]">
                     {decryptedDigits.map((digit, i) => (
                       <span
                         key={i}
-                        className={`w-7 h-10 flex items-center justify-center rounded-lg border ${
+                        className={`w-6 h-9 sm:w-7 sm:h-10 flex items-center justify-center rounded-lg border ${
                           isDecrypting
                             ? 'bg-[rgba(0,180,216,0.2)] border-[#00b4d8] text-[#00b4d8] animate-pulse'
                             : 'bg-[rgba(0,245,212,0.12)] border-[#00f5d4]/70 text-[#00f5d4] shadow-[0_0_12px_rgba(0,245,212,0.4)]'
@@ -421,7 +421,7 @@ export default function AuthView() {
                     type="button"
                     onClick={handleAutoFillOtp}
                     disabled={isDecrypting}
-                    className="liquid-glass-btn text-[#03121c] font-extrabold text-[10px] px-3.5 py-2.5 rounded-lg cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+                    className="liquid-glass-btn text-[#03121c] font-extrabold text-[10px] px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-lg cursor-pointer flex items-center gap-1.5 disabled:opacity-50 shrink-0"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     AUTO-FILL
@@ -431,7 +431,7 @@ export default function AuthView() {
             )}
 
             {/* 6 Mechanical Frosted Digit Chambers */}
-            <div className="flex justify-center items-center gap-2.5 my-4" onPaste={handlePaste}>
+            <div className="flex justify-center items-center gap-1.5 sm:gap-2.5 my-4" onPaste={handlePaste}>
               {otpDigits.map((digit, idx) => {
                 const isAnimating = animatingBox === idx;
                 return (
@@ -444,7 +444,7 @@ export default function AuthView() {
                       onChange={(e) => handleDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(idx, e)}
                       onFocus={() => setActiveBoxIndex(idx)}
-                      className={`w-11 h-14 text-center text-xl font-bold rounded-xl text-[#00f5d4] focus:outline-none transition-all duration-200 liquid-glass-input ${
+                      className={`w-9 h-12 sm:w-11 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-xl text-[#00f5d4] focus:outline-none transition-all duration-200 liquid-glass-input ${
                         isAnimating
                           ? 'border-[#00f5d4] bg-[#00f5d4]/25 shadow-[0_0_20px_rgba(0,245,212,0.9)] scale-105'
                           : activeBoxIndex === idx
