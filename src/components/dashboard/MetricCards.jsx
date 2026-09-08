@@ -20,9 +20,9 @@ export default function MetricCards() {
       count: evidenceList.length,
       subtitle: 'FILES UPLOADED',
       icon: FolderLock,
-      iconColor: 'text-[#00ff9d]',
-      borderColor: 'border-[#00ff9d]/30',
-      bgColor: 'bg-[#00ff9d]/10'
+      iconColor: 'text-[#00f5d4]',
+      borderColor: 'border-[#00f5d4]/40',
+      bgColor: 'bg-[#00f5d4]/15'
     },
     {
       id: 'events',
@@ -30,9 +30,9 @@ export default function MetricCards() {
       count: events.length,
       subtitle: 'EVENTS IDENTIFIED',
       icon: ListChecks,
-      iconColor: 'text-[#00ff9d]',
-      borderColor: 'border-[#00ff9d]/30',
-      bgColor: 'bg-[#00ff9d]/10'
+      iconColor: 'text-[#00f5d4]',
+      borderColor: 'border-[#00f5d4]/40',
+      bgColor: 'bg-[#00f5d4]/15'
     },
     {
       id: 'entities',
@@ -40,9 +40,9 @@ export default function MetricCards() {
       count: uniqueEntities.size,
       subtitle: 'PEOPLE / ACCOUNTS / DEVICES',
       icon: Users,
-      iconColor: 'text-[#00e5ff]',
-      borderColor: 'border-[#00e5ff]/30',
-      bgColor: 'bg-[#00e5ff]/10'
+      iconColor: 'text-[#00b4d8]',
+      borderColor: 'border-[#00b4d8]/40',
+      bgColor: 'bg-[#00b4d8]/15'
     },
     {
       id: 'conflicts',
@@ -50,9 +50,9 @@ export default function MetricCards() {
       count: conflicts.length,
       subtitle: conflicts.length > 0 ? 'HIGH PRIORITY ALERTS' : 'NO INCONSISTENCIES',
       icon: AlertTriangle,
-      iconColor: conflicts.length > 0 ? 'text-[#ff1744]' : 'text-[#64748b]',
-      borderColor: conflicts.length > 0 ? 'border-[#ff1744]/40' : 'border-[#132438]',
-      bgColor: conflicts.length > 0 ? 'bg-[#ff1744]/10' : 'bg-[#0d1424]'
+      iconColor: conflicts.length > 0 ? 'text-[#ff1744]' : 'text-[#94a3b8]',
+      borderColor: conflicts.length > 0 ? 'border-[#ff1744]/50' : 'border-[#00f5d4]/20',
+      bgColor: conflicts.length > 0 ? 'bg-[#ff1744]/15' : 'bg-[rgba(15,62,77,0.3)]'
     },
     {
       id: 'status',
@@ -60,27 +60,27 @@ export default function MetricCards() {
       count: evidenceList.length > 0 ? (currentCase?.status || 'ACTIVE') : 'AWAITING EVIDENCE',
       subtitle: evidenceList.length > 0 ? (currentCase?.statusText || 'INVESTIGATION ONGOING') : 'NO EVIDENCE LOADED',
       icon: ShieldCheck,
-      iconColor: evidenceList.length > 0 ? 'text-[#00ff9d]' : 'text-[#64748b]',
-      borderColor: evidenceList.length > 0 ? 'border-[#00ff9d]/40' : 'border-[#132438]',
-      bgColor: evidenceList.length > 0 ? 'bg-[#00ff9d]/10' : 'bg-[#0d1424]',
+      iconColor: evidenceList.length > 0 ? 'text-[#00f5d4]' : 'text-[#94a3b8]',
+      borderColor: evidenceList.length > 0 ? 'border-[#00f5d4]/50' : 'border-[#00f5d4]/20',
+      bgColor: evidenceList.length > 0 ? 'bg-[#00f5d4]/15' : 'bg-[rgba(15,62,77,0.3)]',
       isStatusCard: true
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-5">
       {cards.map((c) => {
         const Icon = c.icon;
         return (
           <div
             key={c.id}
-            className={`cyber-panel p-3.5 flex items-center justify-between border ${c.borderColor} hover:border-[#00ff9d]/60 transition`}
+            className="cyber-panel p-4 flex items-center justify-between hover:border-[#00f5d4]/70 transition-all duration-300 group"
           >
             <div className="space-y-1">
-              <div className="text-[10px] text-[#64748b] tracking-wider uppercase font-mono-cyber font-semibold">
+              <div className="text-[10px] text-[#94a3b8] tracking-wider uppercase font-mono-cyber font-bold">
                 {c.label}
               </div>
-              <div className={`font-bold font-mono-cyber ${c.isStatusCard ? 'text-xs text-[#00ff9d] tracking-wider uppercase' : 'text-xl text-[#e2e8f0]'}`}>
+              <div className={`font-extrabold font-mono-cyber ${c.isStatusCard ? 'text-xs text-[#00f5d4] tracking-wider uppercase' : 'text-2xl text-[#f8fafc] group-hover:text-[#00f5d4] transition'}`}>
                 {c.count}
               </div>
               <div className="text-[9px] text-[#64748b] tracking-widest uppercase font-mono-cyber">
@@ -88,7 +88,7 @@ export default function MetricCards() {
               </div>
             </div>
 
-            <div className={`w-10 h-10 rounded ${c.bgColor} border ${c.borderColor} flex items-center justify-center ${c.iconColor} shrink-0`}>
+            <div className={`w-11 h-11 rounded-xl ${c.bgColor} border ${c.borderColor} flex items-center justify-center ${c.iconColor} shrink-0 shadow-[0_0_15px_rgba(0,245,212,0.15)] group-hover:scale-110 transition duration-300`}>
               <Icon className="w-5 h-5" />
             </div>
           </div>

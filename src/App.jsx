@@ -24,7 +24,7 @@ function MainContent() {
   if (activeTab === 'otp_control') return <OtpControlStationView />;
 
   return (
-    <main className="flex-1 p-6 overflow-y-auto min-h-[calc(100vh-61px-37px)] bg-[#02070b] cyber-forensics-bg">
+    <main className="flex-1 p-6 overflow-y-auto min-h-[calc(100vh-61px-37px)] cyber-forensics-bg relative z-10">
       {activeTab === 'dashboard' && <DashboardView />}
       {activeTab === 'cases' && <CaseManagerView />}
       {activeTab === 'evidence' && <EvidenceVaultView />}
@@ -43,9 +43,17 @@ function AppLayout() {
   const isAuthOrStandalone = activeTab === 'login' || activeTab === 'demo_otp' || activeTab === 'otp_control';
 
   return (
-    <div className="min-h-screen w-full bg-[#02070b] text-[#e2e8f0] flex flex-col font-mono-cyber scanline-overlay">
+    <div className="min-h-screen w-full bg-[#02070b] text-[#f8fafc] flex flex-col font-mono-cyber relative overflow-hidden">
+      {/* Global Ambient Fluid Liquid Orbs for Refraction across all pages */}
+      <div className="ambient-liquid-teal -top-24 -left-20" />
+      <div className="ambient-liquid-cyan -bottom-28 -right-20" />
+      <div className="ambient-liquid-indigo top-1/3 right-1/4 opacity-50" />
+
+      {/* Dynamic Scanline Light Beam */}
+      <div className="scanline-beam" />
+
       {!isAuthOrStandalone && <Header />}
-      <div className="flex flex-1 w-full justify-center items-center">
+      <div className="flex flex-1 w-full justify-center items-stretch relative z-10">
         {!isAuthOrStandalone && <Sidebar />}
         <MainContent />
       </div>
