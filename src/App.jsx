@@ -43,9 +43,9 @@ function AppLayout() {
   const isAuthOrStandalone = activeTab === 'login' || activeTab === 'demo_otp' || activeTab === 'otp_control';
 
   return (
-    <div className="min-h-screen bg-[#02070b] text-[#e2e8f0] flex flex-col font-mono-cyber scanline-overlay">
+    <div className="min-h-screen w-full bg-[#02070b] text-[#e2e8f0] flex flex-col font-mono-cyber scanline-overlay">
       {!isAuthOrStandalone && <Header />}
-      <div className="flex flex-1">
+      <div className="flex flex-1 w-full justify-center items-center">
         {!isAuthOrStandalone && <Sidebar />}
         <MainContent />
       </div>

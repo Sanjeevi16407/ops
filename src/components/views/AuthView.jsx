@@ -1,16 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight, Copy, Check } from 'lucide-react';
+import { Shield, Key, Cpu, CheckCircle2, AlertTriangle, Lock, RefreshCw, X, Mail, ArrowRight, Radio, Sparkles, Terminal } from 'lucide-react';
 import { useInvestigation } from '../../store/InvestigationContext';
 
 export default function AuthView() {
   const { requestOtpFromBackend, checkOtpRequestStatus, verifyOtpWithBackend, resendOtpInBackend, setActiveTab } = useInvestigation();
 
   const [email, setEmail] = useState('investigator@example.com');
-  const [password, setPassword] = useState('••••••••••••');
   const [currentReq, setCurrentReq] = useState(null);
-  const [authStep, setAuthStep] = useState('idle'); // 'idle' | 'otp_ready' | 'verifying' | 'success' | 'failure' | 'denied'
+  const [authStep, setAuthStep] = useState('idle'); // 'idle' | 'pending_auth' | 'otp_ready' | 'verifying' | 'success' | 'failure' | 'denied'
 
-  // Toast Notification State
+  // Decryption Signal Animation State
+  const [isDecrypting, setIsDecrypting] = useState(false);
+  const [decryptedDigits, setDecryptedDigits] = useState(['*', '*', '*', '*', '*', '*']);
+
+  // Toast Notification State (Centered Top Toast)
   const [toast, setToast] = useState(null); // { show: boolean, title: string, message: string, detail: string }
 
   // 6 Digit OTP Input State
@@ -18,7 +21,6 @@ export default function AuthView() {
   const [activeBoxIndex, setActiveBoxIndex] = useState(0);
   const [animatingBox, setAnimatingBox] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [copiedOtp, setCopiedOtp] = useState(false);
 
   // Resend Countdown Timer & Counter
   const [resendTimer, setResendTimer] = useState(30);
@@ -52,6 +54,28 @@ export default function AuthView() {
     return () => clearInterval(timer);
   }, [authStep, resendTimer]);
 
+  // Trigger Decryption Sequence Animation when OTP code arrives
+  const triggerDecryptionAnimation = (otpCode) => {
+    if (!otpCode) return;
+    setIsDecrypting(true);
+    const target = otpCode.split('');
+    let tickCount = 0;
+
+    const interval = setInterval(() => {
+      tickCount++;
+      setDecryptedDigits(target.map((d, i) => {
+        if (tickCount > (i + 1) * 3) return d;
+        return Math.floor(Math.random() * 10).toString();
+      }));
+
+      if (tickCount > 22) {
+        clearInterval(interval);
+        setDecryptedDigits(target);
+        setIsDecrypting(false);
+      }
+    }, 45);
+  };
+
   // Real-time Detection of OTP Status via Backend Polling / Events
   useEffect(() => {
     let interval = null;
@@ -62,6 +86,7 @@ export default function AuthView() {
           setCurrentReq(prev => ({ ...prev, ...statusObj }));
           setAuthStep('otp_ready');
           showOtpSentToast(statusObj.otp);
+          triggerDecryptionAnimation(statusObj.otp);
           clearInterval(interval);
           setTimeout(() => inputRefs[0].current?.focus(), 150);
         } else if (statusObj.status === 'DENIED') {
@@ -73,7 +98,7 @@ export default function AuthView() {
     return () => clearInterval(interval);
   }, [authStep, currentReq]);
 
-  // Helper to trigger the required in-page notification toast with visible OTP
+  // Helper to trigger the top-centered notification toast
   const showOtpSentToast = (otpCode) => {
     setToast({
       show: true,
@@ -83,7 +108,7 @@ export default function AuthView() {
     });
   };
 
-  // Step 1: User enters login credentials and clicks LOGIN / REQUEST OTP
+  // Step 1: User enters email credentials and clicks LOGIN / REQUEST OTP
   const handleLoginSubmit = (e) => {
     if (e) e.preventDefault();
     if (!email.trim()) return;
@@ -94,11 +119,11 @@ export default function AuthView() {
       setCurrentReq(req);
 
       if (req.status === 'ACTIVE') {
-        // Active OTP created instantly by backend OTP service
         setAuthStep('otp_ready');
         setOtpDigits(['', '', '', '', '', '']);
         setResendTimer(30);
         showOtpSentToast(req.otp);
+        triggerDecryptionAnimation(req.otp);
         setTimeout(() => inputRefs[0].current?.focus(), 150);
       } else {
         setAuthStep('pending_auth');
@@ -174,6 +199,7 @@ export default function AuthView() {
         setResendCount(prev => prev + 1);
         setResendTimer(30);
         showOtpSentToast(result.otp);
+        triggerDecryptionAnimation(result.otp);
         setTimeout(() => inputRefs[0].current?.focus(), 150);
       } else {
         setErrorMessage(result.error || 'Failed to resend OTP.');
@@ -202,14 +228,14 @@ export default function AuthView() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-61px)] flex flex-col items-center justify-center p-6 bg-[#02070b] cyber-forensics-bg font-mono-cyber relative overflow-hidden">
+    <div className="min-h-screen w-full flex-1 flex flex-col items-center justify-center p-6 bg-[#02070b] cyber-forensics-bg font-mono-cyber relative overflow-hidden text-center mx-auto">
       {/* Scanline Overlay */}
       <div className="absolute inset-0 scanline-overlay pointer-events-none opacity-40" />
 
-      {/* TOP FLOATING TOAST NOTIFICATION WITH VISIBLE OTP */}
+      {/* TOP CENTERED FLOATING TOAST NOTIFICATION */}
       {toast && toast.show && (
-        <div className="fixed top-6 right-6 z-50 max-w-md w-full animate-slide-down">
-          <div className="bg-[#04121d] border-l-4 border-[#00ff9d] border-t border-r border-b border-[#00ff9d]/40 rounded-r-lg p-4 shadow-[0_0_30px_rgba(0,255,157,0.25)] flex items-start gap-3 relative">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-md w-full px-4 animate-slide-down">
+          <div className="bg-[#04121d] border-l-4 border-[#00ff9d] border-t border-r border-b border-[#00ff9d]/40 rounded-r-lg p-4 shadow-[0_0_35px_rgba(0,255,157,0.3)] flex items-start gap-3 relative backdrop-blur-md">
             <div className="p-2.5 rounded bg-[#00ff9d]/10 text-[#00ff9d] shrink-0 border border-[#00ff9d]/40 animate-pulse">
               <Lock className="w-5 h-5" />
             </div>
@@ -222,7 +248,7 @@ export default function AuthView() {
             </div>
             <button
               onClick={() => setToast(null)}
-              className="text-[#64748b] hover:text-[#e2e8f0] transition text-xs p-1"
+              className="text-[#64748b] hover:text-[#e2e8f0] transition text-xs p-1 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -230,8 +256,8 @@ export default function AuthView() {
         </div>
       )}
 
-      {/* Main Authentication Container Card */}
-      <div className="w-full max-w-lg cyber-panel p-8 space-y-6 border border-[#00ff9d]/40 shadow-[0_0_40px_rgba(0,255,157,0.15)] relative z-10 text-center">
+      {/* Main Authentication Card - PERFECTLY CENTERED */}
+      <div className="w-full max-w-md mx-auto cyber-panel p-8 space-y-6 border border-[#00ff9d]/40 shadow-[0_0_50px_rgba(0,255,157,0.2)] relative z-10 text-center bg-[#070d14]/90 backdrop-blur-md rounded-xl">
         {/* ARVIX Branding */}
         <div className="flex flex-col items-center space-y-2">
           <div className="w-14 h-14 rounded-lg bg-[#00ff9d]/10 border border-[#00ff9d]/50 flex items-center justify-center text-[#00ff9d] shadow-[0_0_20px_rgba(0,255,157,0.4)] animate-pulse">
@@ -243,15 +269,15 @@ export default function AuthView() {
           </p>
         </div>
 
-        {/* STATE 1: CREDENTIAL ENTRY / LOGIN FORM */}
+        {/* STATE 1: EMAIL-ONLY LOGIN FORM (Password Field Removed) */}
         {authStep === 'idle' && (
-          <form onSubmit={handleLoginSubmit} className="space-y-4 text-left">
+          <form onSubmit={handleLoginSubmit} className="space-y-5 text-left">
             <h2 className="text-xs font-bold text-[#e2e8f0] uppercase tracking-wider text-center border-b border-[#132438] pb-2">
               INVESTIGATOR CREDENTIAL LOGIN
             </h2>
 
-            <div className="space-y-1">
-              <label className="block text-[10px] text-[#64748b] font-bold">EMAIL OR USERNAME *</label>
+            <div className="space-y-1.5">
+              <label className="block text-[10px] text-[#64748b] font-bold tracking-wider">EMAIL OR USERNAME *</label>
               <div className="relative">
                 <input
                   type="text"
@@ -259,30 +285,15 @@ export default function AuthView() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="investigator@arvix.sec"
-                  className="w-full bg-[#02070b] border border-[#132438] focus:border-[#00ff9d] text-[#e2e8f0] pl-9 pr-4 py-2.5 rounded text-xs focus:outline-none transition"
+                  className="w-full bg-[#02070b] border border-[#132438] focus:border-[#00ff9d] text-[#e2e8f0] pl-10 pr-4 py-3 rounded text-xs focus:outline-none transition-all duration-200 focus:shadow-[0_0_15px_rgba(0,255,157,0.2)]"
                 />
-                <Mail className="w-4 h-4 text-[#64748b] absolute left-3 top-3" />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-[10px] text-[#64748b] font-bold">SECURITY PASSWORD *</label>
-              <div className="relative">
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full bg-[#02070b] border border-[#132438] focus:border-[#00ff9d] text-[#e2e8f0] pl-9 pr-4 py-2.5 rounded text-xs focus:outline-none transition"
-                />
-                <Lock className="w-4 h-4 text-[#64748b] absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-[#64748b] absolute left-3.5 top-3.5" />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold py-3 rounded text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(0,255,157,0.4)] mt-2"
+              className="w-full bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold py-3.5 rounded text-xs transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(0,255,157,0.4)] mt-2"
             >
               <Cpu className="w-4 h-4" />
               AUTHENTICATE & SEND OTP
@@ -309,7 +320,7 @@ export default function AuthView() {
           </div>
         )}
 
-        {/* STATE 3: OTP READY / INPUT 6 DIGITS WITH DISPLAYED OTP CODE */}
+        {/* STATE 3: OTP READY / INPUT 6 DIGITS WITH UNIQUE CYBER DECRYPTION ANIMATION */}
         {(authStep === 'otp_ready' || authStep === 'verifying') && (
           <div className="space-y-5 animate-fade-in">
             <div className="space-y-1">
@@ -321,24 +332,46 @@ export default function AuthView() {
               </p>
             </div>
 
-            {/* VISIBLE VERIFICATION OTP CODE BADGE ON LOGIN PAGE */}
+            {/* UNIQUE CYBER DECRYPTION RECEPTION DISPLAY BANNER */}
             {currentReq?.otp && (
-              <div className="bg-[#00ff9d]/10 border border-[#00ff9d]/50 rounded-lg p-3 flex items-center justify-between text-left shadow-[0_0_20px_rgba(0,255,157,0.15)]">
-                <div>
-                  <span className="text-[10px] text-[#00ff9d] font-bold tracking-wider uppercase block">
-                    🔐 VERIFICATION OTP CODE:
+              <div className="bg-[#020b12] border border-[#00ff9d]/50 rounded-xl p-3.5 space-y-2 text-left relative overflow-hidden shadow-[0_0_25px_rgba(0,255,157,0.2)]">
+                {/* Background scanning light */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00ff9d]/10 to-transparent animate-pulse pointer-events-none" />
+
+                <div className="flex justify-between items-center text-[10px]">
+                  <span className="text-[#00ff9d] font-bold tracking-widest uppercase flex items-center gap-1">
+                    <Radio className="w-3.5 h-3.5 text-[#00ff9d] animate-ping" />
+                    {isDecrypting ? 'DECRYPTING QUANTUM OTP...' : 'SIGNAL LOCKED // OTP DECRYPTED'}
                   </span>
-                  <span className="text-2xl font-bold font-mono tracking-widest text-[#00ff9d]">
-                    {currentReq.otp}
-                  </span>
+                  <span className="text-[#00e5ff] font-mono text-[9px]">{currentReq.requestId}</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleAutoFillOtp}
-                  className="bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold text-[10px] px-3.5 py-2 rounded transition cursor-pointer flex items-center gap-1 shadow-[0_0_10px_rgba(0,255,157,0.4)]"
-                >
-                  AUTO-FILL & VERIFY
-                </button>
+
+                <div className="flex items-center justify-between bg-[#061422] p-2.5 rounded-lg border border-[#00ff9d]/30">
+                  <div className="flex gap-2 font-mono font-bold text-xl text-[#00ff9d]">
+                    {decryptedDigits.map((digit, i) => (
+                      <span
+                        key={i}
+                        className={`w-7 h-9 flex items-center justify-center rounded bg-[#02070b] border ${
+                          isDecrypting
+                            ? 'border-[#00e5ff] text-[#00e5ff] animate-pulse'
+                            : 'border-[#00ff9d]/60 text-[#00ff9d] shadow-[0_0_8px_rgba(0,255,157,0.4)]'
+                        }`}
+                      >
+                        {digit}
+                      </span>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleAutoFillOtp}
+                    disabled={isDecrypting}
+                    className="bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold text-[10px] px-3 py-2 rounded-md transition cursor-pointer flex items-center gap-1 shadow-[0_0_12px_rgba(0,255,157,0.5)] disabled:opacity-50"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    AUTO-FILL
+                  </button>
+                </div>
               </div>
             )}
 
@@ -356,7 +389,7 @@ export default function AuthView() {
                       onChange={(e) => handleDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(idx, e)}
                       onFocus={() => setActiveBoxIndex(idx)}
-                      className={`w-11 h-13 text-center text-lg font-bold bg-[#02070b] border rounded text-[#00ff9d] focus:outline-none transition-all duration-200 ${
+                      className={`w-11 h-13 text-center text-lg font-bold bg-[#02070b] border rounded-lg text-[#00ff9d] focus:outline-none transition-all duration-200 ${
                         isAnimating
                           ? 'border-[#00ff9d] bg-[#00ff9d]/20 shadow-[0_0_15px_rgba(0,255,157,0.8)] scale-105'
                           : activeBoxIndex === idx
@@ -381,7 +414,7 @@ export default function AuthView() {
                 <button
                   onClick={() => handleVerifyOtp(otpDigits.join(''))}
                   disabled={otpDigits.join('').length < 6}
-                  className="w-full bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold py-2.5 rounded text-xs transition cursor-pointer disabled:opacity-40 shadow-[0_0_15px_rgba(0,255,157,0.3)]"
+                  className="w-full bg-[#00ff9d] hover:bg-[#00ff9d]/80 text-[#06090e] font-bold py-3 rounded text-xs transition cursor-pointer disabled:opacity-40 shadow-[0_0_15px_rgba(0,255,157,0.3)]"
                 >
                   VERIFY & LOGIN
                 </button>
