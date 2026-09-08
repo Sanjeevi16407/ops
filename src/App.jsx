@@ -44,6 +44,14 @@ function AppLayout() {
 
   return (
     <div className="min-h-screen w-full bg-[#02070b] text-[#f8fafc] flex flex-col font-mono-cyber relative overflow-hidden">
+      {/* Translucent Cyber Circuit Background Layer (Exclusive to After-Login Website, NOT Login Page) */}
+      {!isAuthOrStandalone && (
+        <>
+          <div className="website-bg-wallpaper" />
+          <div className="website-bg-vignette" />
+        </>
+      )}
+
       {/* Global Ambient Fluid Liquid Orbs for Refraction across all pages */}
       <div className="ambient-liquid-teal -top-24 -left-20" />
       <div className="ambient-liquid-cyan -bottom-28 -right-20" />
