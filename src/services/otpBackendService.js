@@ -27,7 +27,15 @@ function generate6DigitOtp() {
 
 // 1. POST /api/otp/request (Submits user login credentials & initiates OTP flow)
 export function apiRequestOtp(emailOrUsername) {
-  const email = emailOrUsername.includes('@') ? emailOrUsername : `${emailOrUsername}@arvix.sec`;
+  const clean = (emailOrUsername || '').trim().toLowerCase();
+  const isGivenEmail = clean.endsWith('@arvix.sec');
+  const isGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(clean);
+
+  if (!isGivenEmail && !isGmail) {
+    throw new Error('Email must be a valid @gmail.com address or authorized @arvix.sec identity.');
+  }
+
+  const email = clean;
   const db = getSharedDb();
 
   const userId = `USR-${Math.floor(100 + Math.random() * 900)}`;

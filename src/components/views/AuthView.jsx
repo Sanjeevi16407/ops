@@ -6,8 +6,35 @@ export default function AuthView() {
   const { requestOtpFromBackend, checkOtpRequestStatus, verifyOtpWithBackend, resendOtpInBackend, setActiveTab } = useInvestigation();
 
   const [email, setEmail] = useState('investigator@arvix.sec');
+  const [emailTouched, setEmailTouched] = useState(false);
   const [currentReq, setCurrentReq] = useState(null);
   const [authStep, setAuthStep] = useState('idle'); // 'idle' | 'pending_auth' | 'otp_ready' | 'verifying' | 'success' | 'failure' | 'denied'
+
+  // Email Validation Logic:
+  // Predefined investigator identities (@arvix.sec) are accepted.
+  // Any other email MUST be a valid @gmail.com address.
+  const checkEmailValidity = (val) => {
+    if (!val || !val.trim()) {
+      return { isValid: false, message: 'Email address is required' };
+    }
+    const clean = val.trim().toLowerCase();
+    const isGivenEmail = clean.endsWith('@arvix.sec');
+    const isGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(clean);
+
+    if (isGivenEmail) {
+      return { isValid: true, isGiven: true, message: 'Official Investigator Identity' };
+    }
+    if (isGmail) {
+      return { isValid: true, isGmail: true, message: 'Verified @gmail.com Identity' };
+    }
+    return {
+      isValid: false,
+      message: 'Invalid email: Custom email must contain "@gmail.com" (e.g. yourname@gmail.com)'
+    };
+  };
+
+  const emailValidity = checkEmailValidity(email);
+  const isEmailValid = emailValidity.isValid;
 
   // Decryption Signal Animation State
   const [isDecrypting, setIsDecrypting] = useState(false);
@@ -111,11 +138,16 @@ export default function AuthView() {
   // Step 1: User enters email and clicks LOGIN / REQUEST OTP
   const handleLoginSubmit = (e) => {
     if (e) e.preventDefault();
-    if (!email.trim()) return;
+    setEmailTouched(true);
+    const validity = checkEmailValidity(email);
+    if (!validity.isValid) {
+      setErrorMessage(validity.message);
+      return;
+    }
 
     try {
       setErrorMessage('');
-      const req = requestOtpFromBackend(email);
+      const req = requestOtpFromBackend(email.trim());
       setCurrentReq(req);
 
       if (req.status === 'ACTIVE') {
@@ -275,12 +307,12 @@ export default function AuthView() {
         <div className="hud-corner-bl" />
         <div className="hud-corner-br" />
 
-        {/* Live Clearance Liquid Status Pill */}
+        {/* Live Clearance Status Pill */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill text-[10px] font-bold text-[#00f5d4] uppercase tracking-widest mb-4">
           <span className="w-2 h-2 rounded-full bg-[#00f5d4] animate-ping" />
           <span className="flex items-center gap-1.5">
-            <Droplets className="w-3 h-3 text-[#00f5d4]" />
-            LIQUID SECURITY ACCESS // LEVEL 4
+            <Lock className="w-3 h-3 text-[#00f5d4]" />
+            SECURITY ACCESS
           </span>
         </div>
 
@@ -303,7 +335,7 @@ export default function AuthView() {
 
         {/* STATE 1: EMAIL-ONLY LOGIN FORM */}
         {authStep === 'idle' && (
-          <form onSubmit={handleLoginSubmit} className="space-y-5 text-left">
+          <form onSubmit={handleLoginSubmit} className="space-y-4 text-left">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="text-[10px] font-bold text-[#cbd5e1] tracking-widest uppercase flex items-center gap-1.5">
@@ -314,15 +346,57 @@ export default function AuthView() {
 
               <div className="relative">
                 <input
-                  type="text"
+                  type="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="investigator@arvix.sec"
-                  className="w-full liquid-glass-input text-[#f8fafc] pl-10 pr-4 py-3.5 text-xs focus:outline-none placeholder-[#475569]"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailTouched(true);
+                  }}
+                  onBlur={() => setEmailTouched(true)}
+                  placeholder="yourname@gmail.com or investigator@arvix.sec"
+                  className={`w-full liquid-glass-input pl-10 pr-10 py-3.5 text-xs focus:outline-none placeholder-[#475569] transition ${
+                    emailTouched && !isEmailValid
+                      ? 'border-[#ff1744] bg-[#ff1744]/10 text-[#ff8080] focus:border-[#ff1744] shadow-[0_0_15px_rgba(255,23,68,0.35)]'
+                      : emailTouched && isEmailValid
+                      ? 'border-[#00f5d4] text-[#f8fafc] shadow-[0_0_12px_rgba(0,245,212,0.25)]'
+                      : 'text-[#f8fafc]'
+                  }`}
                 />
-                <Activity className="w-4 h-4 text-[#00f5d4]/80 absolute left-3.5 top-4" />
+                <Activity className={`w-4 h-4 absolute left-3.5 top-4 transition ${
+                  emailTouched && !isEmailValid ? 'text-[#ff1744]' : 'text-[#00f5d4]/80'
+                }`} />
+
+                {/* Right Validation Status Indicator */}
+                <div className="absolute right-3.5 top-3.5 pointer-events-none">
+                  {emailTouched && (
+                    isEmailValid ? (
+                      <CheckCircle2 className="w-4 h-4 text-[#00f5d4] animate-fade-in" />
+                    ) : (
+                      <AlertTriangle className="w-4 h-4 text-[#ff1744] animate-fade-in" />
+                    )
+                  )}
+                </div>
               </div>
+
+              {/* Real-time Email Validation Message */}
+              {emailTouched && (
+                <div className={`text-[10px] font-mono-cyber flex items-center gap-1.5 px-1 py-0.5 animate-fade-in ${
+                  isEmailValid ? 'text-[#00f5d4]' : 'text-[#ff1744]'
+                }`}>
+                  {isEmailValid ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-[#00f5d4]" />
+                      <span>{emailValidity.message}</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-[#ff1744]" />
+                      <span>{emailValidity.message}</span>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Quick Preset Investigator Badges */}
               <div className="pt-2">
@@ -336,7 +410,10 @@ export default function AuthView() {
                     <button
                       key={preset.val}
                       type="button"
-                      onClick={() => setEmail(preset.val)}
+                      onClick={() => {
+                        setEmail(preset.val);
+                        setEmailTouched(true);
+                      }}
                       className="px-3 py-1 rounded-lg liquid-glass-chip text-[#cbd5e1] hover:text-[#00f5d4] text-[10px] cursor-pointer"
                     >
                       {preset.label}
@@ -349,7 +426,8 @@ export default function AuthView() {
             {/* Liquid Glass Action Button */}
             <button
               type="submit"
-              className="w-full liquid-glass-btn text-[#03121c] font-extrabold py-3.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer mt-3"
+              disabled={emailTouched && !isEmailValid}
+              className="w-full liquid-glass-btn text-[#03121c] font-extrabold py-3.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer mt-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
             >
               <Cpu className="w-4 h-4 text-[#03121c]" />
               <span>AUTHENTICATE & SEND OTP</span>
@@ -565,9 +643,8 @@ export default function AuthView() {
         )}
 
         {/* Telemetry Footer Bar */}
-        <div className="border-t border-[rgba(255,255,255,0.08)] pt-4 mt-6 text-[10px] text-[#94a3b8] flex justify-between items-center">
+        <div className="border-t border-[rgba(255,255,255,0.08)] pt-4 mt-6 text-[10px] text-[#94a3b8] flex justify-center items-center">
           <span className="flex items-center gap-1.5"><Lock className="w-3 h-3 text-[#00f5d4]" /> AES-256 ENCRYPTED</span>
-          <span className="text-[#00b4d8] flex items-center gap-1"><Zap className="w-3 h-3 text-[#00b4d8]" /> ARVIX LIQUID v2.4</span>
         </div>
       </div>
     </div>
